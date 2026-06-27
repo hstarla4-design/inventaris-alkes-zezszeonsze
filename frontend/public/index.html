@@ -1,0 +1,1959 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RUMAH SAKIT ZezszeonSze</title>
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260622-role-ai-sync" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="scan-view is-hidden" id="scan-view">
+        <div class="scan-shell">
+          <div class="scan-hero">
+            <p class="eyebrow">Hasil Pemindaian Kode QR</p>
+            <h1 id="scan-title">Memuat data alat</h1>
+            <p class="muted" id="scan-subtitle">Menyiapkan detail alat kesehatan.</p>
+          </div>
+          <div id="scan-content"></div>
+        </div>
+      </section>
+
+      <section class="qr-modal is-hidden" id="qr-modal" aria-modal="true" role="dialog" aria-label="Download QR alat">
+        <div class="qr-modal__backdrop" data-close-qr-modal></div>
+        <div class="qr-modal__panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">QR Code</p>
+              <h2 id="qr-modal-title">Download QR</h2>
+            </div>
+            <button class="button button--small" type="button" data-close-qr-modal>Tutup</button>
+          </div>
+          <div class="qr-download-preview">
+            <img id="qr-download-image" alt="Preview QR alat" />
+          </div>
+          <div class="button-row">
+            <a class="button button--primary" id="qr-download-link" href="#" download="QR-CODE.png">Download QR</a>
+            <button class="button" type="button" id="qr-open-button">Buka Gambar</button>
+            <button class="button" type="button" id="qr-print-button">Print</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-logo">
+            <img src="assets/images/rs-zezszeonsze-mark.png" alt="Logo Rumah Sakit ZezszeonSze" />
+          </div>
+          <div>
+          <p class="eyebrow brand-name">RUMAH SAKIT ZezszeonSze</p>
+          <h1>Inventaris Alat Kesehatan</h1>
+          </div>
+        </div>
+        <div class="session-pill" id="session-pill">Belum login</div>
+      </section>
+
+      <section class="login-view" id="login-view">
+        <div class="auth-layout">
+          <form class="panel login-panel" id="login-form">
+            <div>
+              <p class="eyebrow">Petugas</p>
+              <h2>Masuk Dashboard</h2>
+            </div>
+
+            <label>
+              Username
+                <input id="username" name="username" autocomplete="username" required />
+            </label>
+
+            <label>
+              Password
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+              />
+            </label>
+
+            <button class="button button--primary" type="submit">Masuk</button>
+            <p class="auth-switch">Belum punya akun? <button type="button" id="show-register">Register</button></p>
+            <p class="message" id="login-message" role="status"></p>
+          </form>
+
+          <form class="panel login-panel is-hidden" id="register-form" autocomplete="off">
+            <div>
+              <p class="eyebrow">Register</p>
+              <h2>Daftar User Baru</h2>
+              <p class="muted">Akun baru masuk status Pending sampai disetujui Admin.</p>
+            </div>
+
+            <label>
+              Nama
+              <input name="nama" required />
+            </label>
+
+            <div class="two-col">
+              <label>
+                Username
+                <input name="username" autocomplete="username" required />
+              </label>
+              <label>
+                Password
+                <input name="password" type="password" autocomplete="new-password" required />
+              </label>
+            </div>
+
+            <div class="two-col">
+              <label>
+                Role
+                <select name="role" id="register-role">
+                  <option>Admin</option>
+                  <option>Teknisi</option>
+                  <option>Kepala Ruangan</option>
+                  <option>Kepala Supervisor</option>
+                  <option>Vendor</option>
+                </select>
+              </label>
+              <label>
+                No HP
+                <input name="no_hp" />
+              </label>
+            </div>
+
+            <div class="conditional-fields" id="register-kepala-fields">
+              <label>
+                Ruangan yang ditempati
+                <select name="ruangan_id" id="register-ruangan"></select>
+              </label>
+              <p class="hint">
+                Kepala Ruangan hanya melihat alat di ruangan ini dan perlu persetujuan saat mutasi ke ruangan lain.
+              </p>
+            </div>
+
+            <div class="conditional-fields" id="register-vendor-fields">
+              <div class="two-col">
+                <label>
+                  Nama PT
+                  <input name="nama_pt" />
+                </label>
+                <label>
+                  Layanan
+                  <select name="vendor_layanan">
+                    <option>Maintenance</option>
+                    <option>Kalibrasi</option>
+                  </select>
+                </label>
+              </div>
+              <p class="hint">
+                Vendor hanya melihat pekerjaan sesuai layanan dan PT yang didaftarkan.
+              </p>
+            </div>
+
+            <label>
+              Email
+              <input name="email" type="email" />
+            </label>
+
+            <label>
+              Telegram ID
+              <input name="telegram_id" />
+            </label>
+
+            <button class="button button--primary" type="submit">Kirim Pendaftaran</button>
+            <p class="auth-switch">Sudah punya akun? <button type="button" id="show-login">Masuk</button></p>
+            <p class="message" id="register-message" role="status"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="dashboard is-hidden" id="dashboard">
+        <button class="sidebar-toggle" type="button" id="sidebar-toggle" aria-label="Buka menu dashboard" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="tabs" aria-label="Navigasi dashboard">
+          <button class="tab" type="button" data-tab="supervisor-overview">Overview</button>
+          <button class="tab is-active" type="button" data-tab="overview">Overview</button>
+          <button class="tab" type="button" data-tab="alat">Alat</button>
+          <button class="tab" type="button" data-tab="maintenance">Maintenance</button>
+          <button class="tab" type="button" data-tab="kalibrasi">Kalibrasi</button>
+          <button class="tab" type="button" data-tab="mutasi">Mutasi</button>
+          <button class="tab" type="button" data-tab="pengajuan">Pengajuan</button>
+          <button class="tab" type="button" data-tab="pengajuan-maintenance">Pengajuan Maintenance</button>
+          <button class="tab" type="button" data-tab="pengajuan-kalibrasi">Pengajuan Kalibrasi</button>
+          <button class="tab" type="button" data-tab="feedback-vendor">Feedback Vendor</button>
+          <button class="tab" type="button" data-tab="vendor-surat">Surat RS</button>
+          <button class="tab" type="button" data-tab="laporan-kr">Laporan KR</button>
+          <button class="tab" type="button" data-tab="supervisor-vendor">Vendor</button>
+          <button class="tab" type="button" data-tab="supervisor-keuangan">Keuangan</button>
+          <button class="tab" type="button" data-tab="supervisor-laporan">Laporan</button>
+          <button class="tab" type="button" data-tab="supervisor-detail-alat">Detail Alat</button>
+          <button class="tab" type="button" data-tab="notifikasi">Notifikasi</button>
+          <button class="tab" type="button" data-tab="ruangan">Ruangan</button>
+          <button class="tab admin-only is-hidden" type="button" data-tab="register">Register User</button>
+          <button class="tab tab--logout" type="button" id="logout-button">Keluar</button>
+        </nav>
+
+        <section class="tab-panel" id="overview-panel">
+          <div class="stats-grid">
+            <article class="stat">
+              <span>Total Alat</span>
+              <strong id="stat-alat">0</strong>
+            </article>
+            <article class="stat">
+              <span>Ruangan</span>
+              <strong id="stat-ruangan">0</strong>
+            </article>
+            <article class="stat">
+              <span>Maintenance</span>
+              <strong id="stat-maintenance">0</strong>
+            </article>
+            <article class="stat stat--condition">
+              <span>Preventive Maintenance</span>
+              <div class="condition-summary" id="stat-preventive-summary"></div>
+            </article>
+            <article class="stat">
+              <span>Kalibrasi</span>
+              <strong id="stat-kalibrasi">0</strong>
+            </article>
+            <article class="stat stat--condition">
+              <span>Status Kalibrasi</span>
+              <div class="condition-summary" id="stat-kalibrasi-summary"></div>
+            </article>
+            <article class="stat">
+              <span>Mutasi</span>
+              <strong id="stat-mutasi">0</strong>
+            </article>
+            <article class="stat admin-only is-hidden">
+              <span>Register Pending</span>
+              <strong id="stat-register">0</strong>
+            </article>
+            <article class="stat stat--condition">
+              <span>Kondisi Alat</span>
+              <div class="condition-summary" id="stat-alert"></div>
+            </article>
+            <article class="stat stat--condition">
+              <span>Jadwal Maintenance</span>
+              <div class="condition-summary schedule-summary" id="stat-maintenance-schedule"></div>
+            </article>
+            <article class="stat stat--condition">
+              <span>Jadwal Kalibrasi</span>
+              <div class="condition-summary schedule-summary" id="stat-calibration-schedule"></div>
+            </article>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Perhatian</p>
+                <h2>Jadwal preventive maintenance</h2>
+              </div>
+              <button class="button" type="button" id="refresh-button">Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Barcode</th>
+                    <th>Nama alat</th>
+                    <th>Ruangan</th>
+                    <th>Risiko</th>
+                    <th>Preventive terakhir</th>
+                    <th>Preventive berikutnya</th>
+                    <th>Status jadwal</th>
+                  </tr>
+                </thead>
+              <tbody id="attention-table"></tbody>
+            </table>
+          </div>
+          </div>
+
+          <div class="panel is-hidden" id="vendor-overview-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Vendor</p>
+                <h2>Ringkasan pekerjaan dan surat</h2>
+              </div>
+            </div>
+            <div class="vendor-overview-grid" id="vendor-overview-grid"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="supervisor-overview-panel">
+          <div class="panel supervisor-hero">
+            <div>
+              <p class="eyebrow">Pemantauan Eksekutif</p>
+              <h2>Dashboard Supervisor Elektromedis</h2>
+              <p class="muted">Ringkasan keputusan, risiko, persetujuan, vendor, biaya, maintenance, kalibrasi, dan analisis inventaris alat kesehatan.</p>
+            </div>
+            <div class="supervisor-kpi-grade" id="supervisor-main-grade">Memuat KPI</div>
+          </div>
+
+          <div class="stats-grid supervisor-kpi-grid" id="supervisor-kpi-grid"></div>
+
+          <div class="split supervisor-wide-split">
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Analisis KPI</p>
+                  <h2>Indikator keputusan</h2>
+                </div>
+              </div>
+              <div class="supervisor-metric-list" id="supervisor-metric-list"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Risiko Operasional</p>
+                  <h2>Prioritas pengawasan</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Alat</th>
+                      <th>Ruangan</th>
+                      <th>Kondisi</th>
+                      <th>Risiko</th>
+                      <th>Rekomendasi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="supervisor-risk-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel analytics-hero">
+            <div>
+              <p class="eyebrow">Analisis Inventaris</p>
+              <h2>Inventarisasi Peralatan Kesehatan</h2>
+              <p class="muted">Distribusi aset, kondisi, kalibrasi, maintenance, dan nilai aset dalam satu ringkasan visual.</p>
+            </div>
+            <div class="analytics-hero-grid" id="inventory-hero-insights"></div>
+          </div>
+
+          <div class="stats-grid supervisor-kpi-grid" id="inventory-kpi-grid"></div>
+          <div class="panel equipment-rank-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Komposisi Alat</p>
+                <h2>Jenis alat dominan</h2>
+              </div>
+            </div>
+            <div class="equipment-rank-list" id="inventory-category-rank"></div>
+          </div>
+          <div class="supervisor-analytics-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Kategori</p>
+                  <h2>Jumlah alat per kategori</h2>
+                </div>
+              </div>
+              <div class="donut-layout" id="inventory-category-chart"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Ruangan</p>
+                  <h2>Jumlah alat per ruangan</h2>
+                </div>
+              </div>
+              <div class="supervisor-chart" id="inventory-room-chart"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Merek</p>
+                  <h2>Jumlah alat per merek</h2>
+                </div>
+              </div>
+              <div class="donut-layout" id="inventory-brand-chart"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Kondisi</p>
+                  <h2>Distribusi kondisi alat</h2>
+                </div>
+              </div>
+              <div class="donut-layout" id="inventory-condition-chart"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Kalibrasi</p>
+                  <h2>Distribusi status kalibrasi</h2>
+                </div>
+              </div>
+              <div class="donut-layout" id="inventory-calibration-chart"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                <p class="eyebrow">Maintenance</p>
+                <h2>Distribusi status maintenance</h2>
+                </div>
+              </div>
+              <div class="donut-layout" id="inventory-maintenance-chart"></div>
+            </div>
+          </div>
+          <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Nilai Aset</p>
+                  <h2>Nilai aset per ruangan</h2>
+                </div>
+              </div>
+              <div class="supervisor-chart" id="inventory-value-room-chart"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Interpretasi</p>
+                <h2>Kesimpulan maintenance</h2>
+              </div>
+            </div>
+            <div class="supervisor-metric-list" id="inventory-maintenance-interpretation"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="supervisor-detail-alat-panel">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Detail Alat</p>
+                <h2>Analisis satu alat</h2>
+              </div>
+              <label class="detail-alat-picker">
+                Pilih alat
+                <select id="supervisor-detail-alat-select"></select>
+              </label>
+            </div>
+            <div id="supervisor-detail-alat-content"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="alat-panel">
+          <div class="alat-workspace">
+            <form class="panel form-panel alat-editor is-hidden" id="alat-form" autocomplete="off">
+              <div>
+                <p class="eyebrow">Data Alat</p>
+                <h2>Tambah alat kesehatan</h2>
+              </div>
+
+              <label>
+                Nama alat
+                <input name="nama_alat" required />
+              </label>
+
+              <label>
+                Foto alat
+                <input name="foto_alat" type="file" accept="image/*" />
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Merk
+                  <input name="merk" />
+                </label>
+                <label>
+                  Tipe
+                  <input name="tipe" />
+                </label>
+              </div>
+
+              <label>
+                Serial number
+                <input name="serial_number" required />
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Harga pembelian
+                  <input name="harga_pembelian" type="number" min="0" />
+                </label>
+                <label>
+                  Kalibrasi awal
+                  <input name="kalibrasi_awal" type="date" />
+                </label>
+              </div>
+
+              <label>
+                Status kepemilikan alat
+                <select name="status_kepemilikan" id="alat-kepemilikan">
+                  <option>Milik RS</option>
+                  <option>KSO</option>
+                  <option>Sewa</option>
+                </select>
+              </label>
+
+              <div class="conditional-fields is-hidden" id="alat-kso-fields">
+                <label>
+                  Nama partner / vendor
+                  <input name="kso_nama_partner" />
+                </label>
+                <div class="two-col">
+                  <label>
+                    Tipe kerja sama
+                    <select name="kso_tipe_kerja_sama" id="alat-kso-type">
+                      <option>Revenue sharing (%)</option>
+                      <option>Fee tetap</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="two-col" id="alat-kso-split-fields">
+                  <label>
+                    Persentase RS
+                    <input name="kso_persen_rs" type="number" min="0" max="100" />
+                  </label>
+                  <label>
+                    Persentase vendor
+                    <input name="kso_persen_vendor" type="number" min="0" max="100" />
+                  </label>
+                </div>
+                <label id="alat-kso-fee-wrap">
+                  Fee tetap
+                  <input name="kso_fee_tetap" type="number" min="0" />
+                </label>
+                <div class="two-col">
+                  <label>
+                    Tanggal mulai kontrak
+                    <input name="kso_tanggal_mulai" type="date" />
+                  </label>
+                  <label>
+                    Tanggal akhir kontrak
+                    <input name="kso_tanggal_akhir" type="date" />
+                  </label>
+                </div>
+                <label>
+                  Upload file kontrak
+                  <input name="kso_file_kontrak" type="file" accept="application/pdf" />
+                </label>
+              </div>
+
+              <div class="conditional-fields is-hidden" id="alat-sewa-fields">
+                <label>
+                  Nama vendor leasing
+                  <input name="sewa_vendor_leasing" />
+                </label>
+                <div class="two-col">
+                  <label>
+                    Biaya sewa per bulan
+                    <input name="sewa_biaya_per_bulan" type="number" min="0" />
+                  </label>
+                  <label id="alat-sewa-duration-wrap">
+                    Durasi kontrak
+                    <input name="sewa_durasi_kontrak" readonly />
+                  </label>
+                </div>
+                <div class="two-col">
+                  <label>
+                    Tanggal mulai sewa
+                    <input name="sewa_tanggal_mulai" type="date" id="alat-sewa-start" />
+                  </label>
+                  <label>
+                    Tanggal berakhir sewa
+                    <input name="sewa_tanggal_akhir" type="date" id="alat-sewa-end" />
+                  </label>
+                </div>
+                <label>
+                  Opsi buyback
+                  <select name="sewa_buyback">
+                    <option>Tidak ada buyback</option>
+                    <option>Ada buyback</option>
+                  </select>
+                </label>
+                <label>
+                  Upload file kontrak
+                  <input name="sewa_file_kontrak" type="file" accept="application/pdf" />
+                </label>
+              </div>
+
+              <div class="two-col">
+                <label>
+                  Perusahaan / Vendor
+                  <input name="vendor" />
+                </label>
+                <div class="conditional-fields" id="alat-date-fields">
+                  <label id="alat-tanggal-instalasi-wrap">
+                    Tanggal instalasi
+                    <input name="tanggal_instalasi" type="date" id="alat-tanggal-instalasi" />
+                  </label>
+                  <label class="is-hidden" id="alat-tanggal-sewa-wrap">
+                    Tanggal sewa
+                    <input name="tanggal_sewa" type="date" id="alat-tanggal-sewa" />
+                  </label>
+                </div>
+              </div>
+
+              <div class="generated-code" aria-live="polite">
+                <span>Kode barcode otomatis</span>
+                <strong id="barcode-preview">Akan dibuat saat disimpan</strong>
+              </div>
+
+              <label>
+                Ruangan
+                <select name="ruangan_id" id="alat-ruangan"></select>
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Kondisi
+                  <select name="kondisi">
+                    <option>Baik</option>
+                    <option>Rusak</option>
+                    <option>Maintenance</option>
+                  </select>
+                </label>
+                <label>
+                  Status
+                  <select name="status">
+                    <option>Aktif</option>
+                    <option>Tidak Aktif</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="form-actions">
+                <button class="button button--primary" id="alat-submit-button" type="submit">Simpan Alat</button>
+                <button class="button is-hidden" id="alat-cancel-button" type="button">Batal Edit</button>
+              </div>
+              <p class="message" id="alat-message" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Inventaris</p>
+                  <h2>Daftar alat</h2>
+                </div>
+                <button class="button button--primary" type="button" id="open-alat-form-button">Tambah Alat</button>
+              </div>
+              <div class="active-room-filter is-hidden" id="active-room-filter">
+                <span id="active-room-filter-text">Menampilkan alat pada ruangan tertentu.</span>
+                <div class="active-room-filter-actions">
+                  <button class="button button--small" type="button" id="back-room-filter-button">Kembali ke Ruangan</button>
+                  <button class="button button--small" type="button" id="clear-room-filter-button">Tampilkan semua alat</button>
+                </div>
+              </div>
+              <div class="filter-row">
+                <label>
+                  Ruangan
+                  <select id="alat-log-ruangan"></select>
+                </label>
+                <label>
+                  Search alat
+                  <input
+                    id="alat-log-search"
+                    placeholder="Cari nama, barcode, serial number, merek, atau vendor"
+                    autocomplete="off"
+                  />
+                </label>
+                <button class="button" type="button" id="alat-search-button">Search</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Barcode</th>
+                      <th>Nama</th>
+                      <th>Serial Number</th>
+                      <th>Merk / Tipe</th>
+                      <th>Perusahaan</th>
+                      <th>Tahun</th>
+                      <th>Ruangan</th>
+                      <th>Kondisi</th>
+                      <th>Status</th>
+                      <th>Konteks</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="alat-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel history-panel" id="alat-history-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Histori Alat</p>
+                <h2 id="history-title">Pilih alat untuk melihat histori</h2>
+              </div>
+            </div>
+            <div id="history-content" class="history-empty">Klik tombol Histori pada daftar alat.</div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="maintenance-panel">
+          <div class="supervisor-only is-hidden" id="supervisor-maintenance-monitoring">
+            <div class="stats-grid supervisor-kpi-grid" id="supervisor-maintenance-cards"></div>
+            <div class="split supervisor-wide-split">
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Trend</p>
+                    <h2>Maintenance per bulan</h2>
+                  </div>
+                </div>
+                <div class="supervisor-chart" id="supervisor-maintenance-chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Breakdown</p>
+                    <h2>Top alat sering rusak</h2>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Alat</th>
+                        <th>Ruangan</th>
+                        <th>Jumlah</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="supervisor-breakdown-table"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="supervisor-analytics-grid">
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Jenis Pekerjaan</p>
+                    <h2>Komposisi maintenance</h2>
+                  </div>
+                </div>
+                <div class="donut-layout" id="supervisor-maintenance-type-chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Ruangan</p>
+                    <h2>Beban maintenance per ruangan</h2>
+                  </div>
+                </div>
+                <div class="supervisor-chart" id="supervisor-maintenance-room-chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Vendor</p>
+                    <h2>Aktivitas vendor maintenance</h2>
+                  </div>
+                </div>
+                <div class="supervisor-chart" id="supervisor-maintenance-vendor-chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Insight</p>
+                    <h2>Evaluasi maintenance</h2>
+                  </div>
+                </div>
+                <div class="supervisor-metric-list" id="supervisor-maintenance-insights"></div>
+              </div>
+            </div>
+          </div>
+          <div class="split side-form-workspace">
+            <form class="panel form-panel side-form-editor is-hidden" id="maintenance-form" autocomplete="off">
+              <div>
+                <p class="eyebrow">Riwayat</p>
+                <h2>Tambah maintenance</h2>
+              </div>
+
+              <label>
+                Ruangan
+                <select name="ruangan_filter" id="maintenance-ruangan"></select>
+              </label>
+
+              <label>
+                Alat
+                <select name="alat_id" id="maintenance-alat" required></select>
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Jenis
+                  <select name="jenis">
+                    <option>Preventive</option>
+                    <option>Corrective Ringan</option>
+                    <option>Corrective Berat</option>
+                    <option>Emergency (Breakdown)</option>
+                  </select>
+                </label>
+                <label>
+                  <span id="maintenance-date-label">Tanggal preventive maintenance</span>
+                  <input name="tanggal" type="date" required />
+                </label>
+              </div>
+
+              <div class="preventive-fields" id="preventive-fields">
+                <div class="two-col">
+                  <label>
+                    Tingkat risiko alat
+                    <select name="tingkat_risiko">
+                      <option>Tinggi</option>
+                      <option selected>Sedang</option>
+                      <option>Rendah</option>
+                    </select>
+                  </label>
+                  <label>
+                    Interval preventive
+                    <input name="interval_preventive" value="3 bulan" readonly />
+                  </label>
+                </div>
+                <div class="two-col">
+                  <label>
+                    Preventive sebelumnya (otomatis)
+                    <input name="preventive_terakhir" type="date" readonly />
+                  </label>
+                  <label>
+                    Preventive berikutnya
+                    <input name="preventive_berikutnya" type="date" readonly />
+                  </label>
+                </div>
+              </div>
+
+              <label>
+                Teknisi
+                <input name="teknisi" />
+              </label>
+
+              <label class="maintenance-vendor-field">
+                Nama vendor / PT
+                <input name="vendor_pt" />
+              </label>
+
+              <label class="maintenance-vendor-field">
+                Status progres
+                <select name="status_progres">
+                  <option>Baru</option>
+                  <option>Proses</option>
+                  <option>Selesai</option>
+                </select>
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Foto sebelum
+                  <input name="foto_sebelum" type="file" accept="image/*" />
+                </label>
+                <label>
+                  Foto sesudah
+                  <input name="foto_sesudah" type="file" accept="image/*" />
+                </label>
+              </div>
+
+              <div class="two-col maintenance-vendor-field">
+                <label>
+                  Foto sparepart
+                  <input name="foto_sparepart" type="file" accept="image/*" />
+                </label>
+                <label>
+                  Invoice
+                  <input name="invoice" type="file" accept="image/*,application/pdf" />
+                </label>
+              </div>
+
+              <label class="maintenance-vendor-field">
+                Biaya perbaikan
+                <input name="biaya_perbaikan" type="number" min="0" />
+              </label>
+
+              <label>
+                Hasil
+                <input name="hasil" />
+              </label>
+
+              <label>
+                Keterangan
+                <textarea name="keterangan" rows="4"></textarea>
+              </label>
+
+              <button class="button button--primary" type="submit">Simpan Maintenance</button>
+              <p class="message" id="maintenance-message" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Log</p>
+                  <h2>Riwayat maintenance</h2>
+                </div>
+                <button class="button button--primary" type="button" id="open-maintenance-form-button">Tambah Maintenance</button>
+              </div>
+              <div class="filter-row">
+                <label id="maintenance-log-room-wrap">
+                  Ruangan
+                  <select id="maintenance-log-ruangan"></select>
+                </label>
+                <label>
+                  Search alat
+                  <input id="maintenance-log-search" placeholder="Cari nama alat / vendor" />
+                </label>
+                <button class="button" type="button" id="maintenance-search-button">Search</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Jenis</th>
+                      <th>Risiko</th>
+                      <th>Preventive terakhir</th>
+                      <th>Preventive berikutnya</th>
+                      <th>Teknisi</th>
+                      <th>Vendor</th>
+                      <th>Progres</th>
+                      <th>Hasil</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+              <tbody id="maintenance-table"></tbody>
+            </table>
+          </div>
+            </div>
+          </div>
+          <div class="panel history-panel" id="maintenance-history-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Histori Maintenance</p>
+                <h2 id="maintenance-history-title">Pilih alat untuk melihat histori maintenance</h2>
+              </div>
+            </div>
+            <div id="maintenance-history-content" class="history-empty">Klik tombol Histori di log maintenance.</div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="kalibrasi-panel">
+          <div class="supervisor-only is-hidden" id="supervisor-kalibrasi-monitoring">
+            <div class="stats-grid supervisor-kpi-grid" id="supervisor-kalibrasi-cards"></div>
+            <div class="split supervisor-wide-split">
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Compliance</p>
+                    <h2>Trend aktivitas kalibrasi bulanan</h2>
+                  </div>
+                </div>
+                <div class="supervisor-chart" id="supervisor-kalibrasi-chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Sertifikat</p>
+                    <h2>Jatuh tempo dan expired</h2>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Alat</th>
+                        <th>Ruangan</th>
+                        <th>Berlaku sampai</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="supervisor-certificate-table"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="supervisor-analytics-grid">
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Status Kalibrasi</p>
+                    <h2>Komposisi status alat</h2>
+                  </div>
+                </div>
+                <div class="donut-layout" id="supervisor-kalibrasi-status-chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Ruangan</p>
+                    <h2>Beban kalibrasi per ruangan</h2>
+                  </div>
+                </div>
+                <div class="supervisor-chart" id="supervisor-kalibrasi-room-chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Vendor</p>
+                    <h2>Biaya dan aktivitas vendor kalibrasi</h2>
+                  </div>
+                </div>
+                <div class="supervisor-chart" id="supervisor-kalibrasi-vendor-chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Analisis</p>
+                    <h2>Evaluasi kalibrasi</h2>
+                  </div>
+                </div>
+                <div class="supervisor-metric-list" id="supervisor-kalibrasi-insights"></div>
+              </div>
+            </div>
+          </div>
+          <div class="split side-form-workspace">
+            <form class="panel form-panel side-form-editor is-hidden" id="kalibrasi-form" autocomplete="off">
+              <div>
+                <p class="eyebrow">Sertifikat</p>
+                <h2>Tambah kalibrasi</h2>
+              </div>
+
+              <label>
+                Ruangan
+                <select name="ruangan_filter" id="kalibrasi-ruangan"></select>
+              </label>
+
+              <label>
+                Alat
+                <select name="alat_id" id="kalibrasi-alat" required></select>
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Tanggal kalibrasi
+                  <input name="tanggal_kalibrasi" type="date" required />
+                </label>
+                <label>
+                  Berlaku sampai
+                  <input name="berlaku_sampai" type="date" />
+                </label>
+              </div>
+
+              <label>
+                Vendor
+                <input name="vendor" />
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Status progres
+                  <select name="status_progres">
+                    <option>Baru</option>
+                    <option>Proses</option>
+                    <option>Selesai</option>
+                  </select>
+                </label>
+                <label>
+                  Biaya kalibrasi
+                  <input name="biaya_kalibrasi" type="number" min="0" />
+                </label>
+              </div>
+
+              <div class="two-col">
+                <label>
+                  Foto nilai ukur
+                  <input name="foto_nilai_ukur" type="file" accept="image/*" />
+                </label>
+                <label>
+                  Foto sertifikat
+                  <input name="foto_sertifikat" type="file" accept="image/*" />
+                </label>
+              </div>
+
+              <div class="two-col">
+                <label>
+                  Hasil
+                  <select name="hasil">
+                    <option>Lulus</option>
+                    <option>Tidak Lulus</option>
+                  </select>
+                </label>
+                <label>
+                  Nomor sertifikat
+                  <input name="nomor_sertifikat" />
+                </label>
+              </div>
+
+              <label>
+                Catatan
+                <textarea name="catatan" rows="4"></textarea>
+              </label>
+
+              <button class="button button--primary" type="submit">Simpan Kalibrasi</button>
+              <p class="message" id="kalibrasi-message" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Log</p>
+                  <h2>Riwayat kalibrasi</h2>
+                </div>
+                <button class="button button--primary" type="button" id="open-kalibrasi-form-button">Tambah Kalibrasi</button>
+              </div>
+              <div class="filter-row">
+                <label id="kalibrasi-log-room-wrap">
+                  Ruangan
+                  <select id="kalibrasi-log-ruangan"></select>
+                </label>
+                <label>
+                  Search alat
+                  <input id="kalibrasi-log-search" placeholder="Cari nama alat / vendor" />
+                </label>
+                <button class="button" type="button" id="kalibrasi-search-button">Search</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Berlaku sampai</th>
+                      <th>Vendor</th>
+                      <th>Progres</th>
+                      <th>Hasil</th>
+                      <th>Biaya</th>
+                      <th>Sertifikat</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+              <tbody id="kalibrasi-table"></tbody>
+            </table>
+          </div>
+            </div>
+          </div>
+          <div class="panel history-panel" id="kalibrasi-history-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Histori Kalibrasi</p>
+                <h2 id="kalibrasi-history-title">Pilih alat untuk melihat histori kalibrasi</h2>
+              </div>
+            </div>
+            <div id="kalibrasi-history-content" class="history-empty">Klik tombol Histori di log kalibrasi.</div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="mutasi-panel">
+          <div class="split">
+            <form class="panel form-panel" id="mutasi-form" autocomplete="off">
+              <div>
+                <p class="eyebrow">Perpindahan</p>
+                <h2>Tambah mutasi alat</h2>
+              </div>
+
+              <label>
+                Alat
+                <select name="alat_id" id="mutasi-alat" required></select>
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Dari ruangan
+                  <select name="dari_ruangan_id" id="mutasi-dari-ruangan"></select>
+                </label>
+                <label>
+                  Ke ruangan
+                  <select name="ke_ruangan_id" id="mutasi-ke-ruangan" required></select>
+                </label>
+              </div>
+
+              <label>
+                Tanggal mutasi
+                <input name="tanggal_mutasi" type="date" required />
+              </label>
+
+              <label>
+                Petugas
+                <input name="petugas" />
+              </label>
+
+              <label>
+                Alasan
+                <textarea name="alasan" rows="4"></textarea>
+              </label>
+
+              <button class="button button--primary" type="submit">Simpan Mutasi</button>
+              <p class="message" id="mutasi-message" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Log</p>
+                  <h2>Riwayat mutasi</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Dari</th>
+                      <th>Ke</th>
+                      <th>Petugas</th>
+                      <th>Alasan</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+              </thead>
+              <tbody id="mutasi-table"></tbody>
+            </table>
+          </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="ruangan-panel">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Pemantauan Ruangan</p>
+                <h2>Ringkasan inventaris per ruangan</h2>
+              </div>
+            </div>
+            <div class="room-grid" id="room-grid"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="pengajuan-panel">
+          <div class="split">
+            <form class="panel form-panel pengajuan-workflow-form" id="pengajuan-form" autocomplete="off">
+              <div>
+                  <p class="eyebrow">Alur Persetujuan</p>
+                <h2>Formulir pengajuan</h2>
+              </div>
+
+              <label>
+                Jenis pengajuan
+                <select name="jenis_pengajuan" id="pengajuan-jenis">
+                  <option>Maintenance</option>
+                  <option>Kalibrasi</option>
+                </select>
+              </label>
+
+              <div class="two-col">
+                <label>
+                  Ruangan
+                  <select name="ruangan_id" id="pengajuan-ruangan"></select>
+                </label>
+                <label>
+                  Alat
+                  <select name="alat_id" id="pengajuan-alat" required></select>
+                </label>
+              </div>
+
+              <div class="two-col pengajuan-kategori-wrap" id="pengajuan-kategori-wrap">
+                <label>
+                  Kategori
+                  <select name="kategori" id="pengajuan-kategori">
+                    <option>Preventive</option>
+                    <option>Corrective Ringan</option>
+                    <option>Corrective Berat</option>
+                    <option>Emergency (Breakdown)</option>
+                  </select>
+                </label>
+                <label class="pengajuan-vendor-wrap" id="pengajuan-vendor-wrap">
+                  Vendor / PT tujuan
+                  <select name="vendor_pt" id="pengajuan-vendor"></select>
+                </label>
+              </div>
+
+              <label>
+                Catatan
+                <textarea name="catatan" rows="4"></textarea>
+              </label>
+
+              <button class="button button--primary" type="submit">Kirim Pengajuan</button>
+              <p class="message pengajuan-form-message" id="pengajuan-message" role="status"></p>
+            </form>
+
+            <div class="panel approval-log-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow" id="pengajuan-approval-eyebrow">Persetujuan</p>
+                  <h2 id="pengajuan-approval-title">Log pengajuan</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Jenis</th>
+                      <th>Ruangan</th>
+                      <th>Vendor</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pengajuan-table"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel teknisi-split-board">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Teknisi</p>
+                  <h2>Pengajuan Maintenance</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Ruangan</th>
+                      <th>Kategori</th>
+                      <th>Vendor</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pengajuan-maintenance-table"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel teknisi-split-board">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Teknisi</p>
+                  <h2>Pengajuan Kalibrasi</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Ruangan</th>
+                      <th>Vendor</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pengajuan-kalibrasi-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="pengajuan-maintenance-panel">
+          <div class="split side-form-workspace">
+            <form class="panel form-panel side-form-editor pengajuan-workflow-form is-hidden" data-fixed-jenis="Maintenance" autocomplete="off">
+              <div>
+                <p class="eyebrow">Teknisi</p>
+                <h2>Form Pengajuan Maintenance</h2>
+              </div>
+              <input type="hidden" name="jenis_pengajuan" value="Maintenance" />
+
+              <div class="two-col">
+                <label>
+                  Ruangan
+                  <select name="ruangan_id"></select>
+                </label>
+                <label>
+                  Alat
+                  <select name="alat_id" required></select>
+                </label>
+              </div>
+
+              <div class="two-col pengajuan-kategori-wrap">
+                <label>
+                  Kategori
+                  <select name="kategori">
+                    <option>Preventive</option>
+                    <option>Corrective Ringan</option>
+                    <option>Corrective Berat</option>
+                    <option>Emergency (Breakdown)</option>
+                  </select>
+                </label>
+                <label class="pengajuan-vendor-wrap">
+                  Vendor / PT tujuan
+                  <select name="vendor_pt"></select>
+                </label>
+              </div>
+
+              <label>
+                Catatan
+                <textarea name="catatan" rows="4"></textarea>
+              </label>
+
+              <button class="button button--primary" type="submit">Kirim Pengajuan Maintenance</button>
+              <p class="message pengajuan-form-message" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Teknisi</p>
+                  <h2>Dashboard Pengajuan Maintenance</h2>
+                </div>
+                <button class="button button--primary" type="button" id="open-pengajuan-maintenance-form-button">Buat Pengajuan</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Ruangan</th>
+                      <th>Kategori</th>
+                      <th>Vendor</th>
+                      <th>Status</th>
+                      <th>Catatan</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pengajuan-maintenance-dashboard-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="pengajuan-kalibrasi-panel">
+          <div class="split side-form-workspace">
+            <form class="panel form-panel side-form-editor pengajuan-workflow-form is-hidden" data-fixed-jenis="Kalibrasi" autocomplete="off">
+              <div>
+                <p class="eyebrow">Teknisi</p>
+                <h2>Form Pengajuan Kalibrasi</h2>
+              </div>
+              <input type="hidden" name="jenis_pengajuan" value="Kalibrasi" />
+
+              <div class="two-col">
+                <label>
+                  Ruangan
+                  <select name="ruangan_id"></select>
+                </label>
+                <label>
+                  Alat
+                  <select name="alat_id" required></select>
+                </label>
+              </div>
+
+              <label class="pengajuan-vendor-wrap">
+                Vendor / PT tujuan
+                <select name="vendor_pt"></select>
+              </label>
+
+              <label>
+                Catatan
+                <textarea name="catatan" rows="4"></textarea>
+              </label>
+
+              <button class="button button--primary" type="submit">Kirim Pengajuan Kalibrasi</button>
+              <p class="message pengajuan-form-message" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Teknisi</p>
+                  <h2>Dashboard Pengajuan Kalibrasi</h2>
+                </div>
+                <button class="button button--primary" type="button" id="open-pengajuan-kalibrasi-form-button">Buat Pengajuan</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Ruangan</th>
+                      <th>Vendor</th>
+                      <th>Status</th>
+                      <th>Catatan</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pengajuan-kalibrasi-dashboard-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="notifikasi-panel">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Notifikasi</p>
+                <h2>Pengajuan dari Kepala Ruangan</h2>
+              </div>
+            </div>
+            <p class="message" id="notifikasi-message" role="status"></p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Alat</th>
+                    <th>Jenis</th>
+                    <th>Kategori</th>
+                    <th>Ruangan</th>
+                    <th>Status Kerja</th>
+                    <th>Status</th>
+                    <th>Catatan</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="notifikasi-table"></tbody>
+              </table>
+            </div>
+            <form class="panel form-panel is-hidden" id="notifikasi-form">
+              <div>
+                <p class="eyebrow">Edit Notifikasi</p>
+                <h2 id="notifikasi-form-title">Perbarui notifikasi teknisi</h2>
+              </div>
+
+              <label>
+                Status pengerjaan
+                <select name="status_pengerjaan" id="notifikasi-status">
+                  <option>Belum dikerjakan</option>
+                  <option>Sedang dikerjakan</option>
+                  <option>Sudah selesai dikerjakan</option>
+                </select>
+              </label>
+
+              <label>
+                Catatan update
+                <textarea name="catatan_update" id="notifikasi-catatan-update" rows="4"></textarea>
+              </label>
+
+              <label>
+                Foto update
+                <input name="foto_update" id="notifikasi-foto-update" type="file" accept="image/*" />
+              </label>
+
+              <div class="button-row">
+                <button class="button button--primary" type="submit">Simpan Update</button>
+                <button class="button button--ghost" type="button" id="notifikasi-cancel-button">Batal</button>
+              </div>
+              <p class="message" id="notifikasi-edit-message" role="status"></p>
+            </form>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="feedback-vendor-panel">
+          <div class="split vendor-feedback-layout" id="vendor-feedback-layout">
+            <form class="panel form-panel" id="vendor-feedback-form" autocomplete="off">
+              <div>
+                <p class="eyebrow">Vendor</p>
+                <h2>Kirim feedback pekerjaan</h2>
+              </div>
+
+              <label>
+                Pekerjaan vendor
+                <select name="record_key" id="vendor-feedback-record"></select>
+              </label>
+
+              <label>
+                Status
+                <select name="status">
+                  <option>Proses</option>
+                  <option>Menunggu Sparepart</option>
+                  <option>Menunggu Jadwal</option>
+                  <option>Selesai</option>
+                  <option>Kendala</option>
+                </select>
+              </label>
+
+              <label>
+                Catatan vendor
+                <textarea name="catatan" rows="5"></textarea>
+              </label>
+
+              <button class="button button--primary" type="submit">Kirim Feedback</button>
+              <p class="message" id="vendor-feedback-message" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Teknisi</p>
+                  <h2>Feedback dari vendor</h2>
+                </div>
+              </div>
+              <p class="message" id="vendor-feedback-action-message" role="status"></p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Vendor</th>
+                      <th>Layanan</th>
+                      <th>Alat</th>
+                      <th>Status</th>
+                      <th>Catatan</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vendor-feedback-table"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel" id="vendor-letter-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Surat</p>
+                  <h2>Surat pengajuan vendor</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Nomor</th>
+                      <th>Vendor</th>
+                      <th>Jenis</th>
+                      <th>Status Email</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vendor-letter-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="vendor-surat-panel">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Rumah Sakit</p>
+                <h2>Surat pengajuan dari RS</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Nomor</th>
+                    <th>Vendor</th>
+                    <th>Jenis</th>
+                    <th>Status Email</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="vendor-surat-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="supervisor-vendor-panel">
+          <div class="stats-grid supervisor-kpi-grid" id="supervisor-vendor-cards"></div>
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Pemantauan Vendor</p>
+                <h2>Kinerja vendor</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Vendor</th>
+                    <th>Pekerjaan</th>
+                    <th>SLA</th>
+                    <th>Terlambat</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="supervisor-vendor-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="supervisor-keuangan-panel">
+          <div class="stats-grid supervisor-kpi-grid" id="supervisor-finance-cards"></div>
+          <div class="split supervisor-wide-split">
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Biaya</p>
+                  <h2>Pengeluaran bulanan</h2>
+                </div>
+              </div>
+              <div class="supervisor-chart" id="supervisor-finance-chart"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Analisis Biaya</p>
+                  <h2>Biaya per ruangan</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Ruangan</th>
+                      <th>Maintenance</th>
+                      <th>Kalibrasi</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="supervisor-finance-room-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="supervisor-analytics-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Komposisi Biaya</p>
+                  <h2>Biaya per jenis pekerjaan</h2>
+                </div>
+              </div>
+              <div class="donut-layout" id="supervisor-finance-type-chart"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Vendor</p>
+                  <h2>Biaya per vendor</h2>
+                </div>
+              </div>
+              <div class="supervisor-chart" id="supervisor-finance-vendor-chart"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Prioritas Anggaran</p>
+                <h2>Alat dengan biaya tertinggi</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Alat</th>
+                    <th>Serial Number</th>
+                    <th>Ruangan</th>
+                    <th>Maintenance</th>
+                    <th>Kalibrasi</th>
+                    <th>Total</th>
+                    <th>Catatan</th>
+                  </tr>
+                </thead>
+                <tbody id="supervisor-finance-asset-table"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Interpretasi Keuangan</p>
+                <h2>Ringkasan keputusan biaya</h2>
+              </div>
+            </div>
+            <div class="supervisor-metric-list" id="supervisor-finance-insights"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="supervisor-laporan-panel">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Laporan Eksekutif</p>
+                <h2>Generate laporan pengawasan</h2>
+              </div>
+            </div>
+            <div class="supervisor-report-grid" id="supervisor-report-grid"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="laporan-kr-panel">
+          <div class="split">
+            <form class="panel form-panel" id="laporan-kr-form" autocomplete="off">
+              <div>
+                <p class="eyebrow">Kepala Ruangan</p>
+                <h2>Laporan alat butuh tindak lanjut</h2>
+              </div>
+
+              <label>
+                Jenis laporan
+                <select name="jenis_pengajuan" id="laporan-kr-jenis">
+                  <option>Maintenance</option>
+                  <option>Kalibrasi</option>
+                </select>
+              </label>
+
+              <label>
+                Alat di ruangan saya
+                <select name="alat_id" id="laporan-kr-alat" required></select>
+              </label>
+
+              <div class="two-col" id="laporan-kr-kategori-wrap">
+                <label>
+                  Kategori maintenance
+                  <select name="kategori" id="laporan-kr-kategori">
+                    <option>Preventive</option>
+                    <option>Corrective Ringan</option>
+                    <option>Corrective Berat</option>
+                    <option>Emergency (Breakdown)</option>
+                  </select>
+                </label>
+                <label id="laporan-kr-vendor-wrap">
+                  Vendor / PT tujuan
+                  <input name="vendor_pt" id="laporan-kr-vendor" />
+                </label>
+              </div>
+
+              <label>
+                Catatan
+                <textarea name="catatan" rows="4"></textarea>
+              </label>
+
+              <button class="button button--primary" type="submit">Kirim Laporan</button>
+              <p class="message" id="laporan-kr-message" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Log</p>
+                  <h2>Laporan saya</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Jenis</th>
+                      <th>Kategori</th>
+                      <th>Status</th>
+                      <th>Catatan</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="laporan-kr-table"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Histori</p>
+                  <h2>Laporan selesai</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Alat</th>
+                      <th>Jenis</th>
+                      <th>Kategori</th>
+                      <th>Status</th>
+                      <th>Catatan</th>
+                    </tr>
+                  </thead>
+                  <tbody id="laporan-kr-history-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel is-hidden" id="register-panel">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Persetujuan</p>
+                <h2>Pendaftaran user baru</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Nama</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Info</th>
+                    <th>Email</th>
+                    <th>No HP</th>
+                    <th>Telegram</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="register-table"></tbody>
+              </table>
+            </div>
+            <p class="message" id="approval-message" role="status"></p>
+          </div>
+        </section>
+      </section>
+
+      <section class="ai-float is-hidden" id="ai-float" aria-label="AI Asisten Inventaris">
+        <button class="ai-float__button" type="button" id="ai-float-button" aria-label="Buka AI Asisten">
+          <span>AI</span>
+        </button>
+        <div class="ai-float__panel is-hidden" id="ai-float-panel">
+          <div class="ai-float__header">
+            <div>
+              <p class="eyebrow">AI Asisten</p>
+              <h2 id="ai-float-title">Asisten Inventaris</h2>
+              <span id="ai-float-subtitle"></span>
+            </div>
+            <button class="ai-float__close" type="button" id="ai-float-close" aria-label="Tutup AI Asisten">×</button>
+          </div>
+          <div class="ai-float__body">
+            <div class="ai-chat" id="ai-chat-messages"></div>
+            <div class="ai-prompts" id="ai-chat-prompts"></div>
+          </div>
+          <form class="ai-float__composer" id="ai-chat-form" autocomplete="off">
+            <div class="ai-float__voice-tools">
+              <button class="ai-voice-button" type="button" id="ai-mic-button" aria-label="Gunakan mikrofon">
+                <span class="ai-voice-button__icon" aria-hidden="true">●</span>
+                <span id="ai-mic-label">Mikrofon</span>
+              </button>
+              <button class="ai-voice-button is-active" type="button" id="ai-speech-toggle" aria-label="Aktifkan atau matikan suara jawaban">
+                <span class="ai-voice-button__waves" aria-hidden="true">)))</span>
+                <span id="ai-speech-label">Suara aktif</span>
+              </button>
+            </div>
+            <div class="ai-float__input-row">
+              <textarea id="ai-chat-input" rows="1" maxlength="500" placeholder="Tanyakan analisis inventaris"></textarea>
+              <button class="ai-send-button" type="submit" aria-label="Kirim pertanyaan">Kirim</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/js/config.runtime.js?v=20260623-ai-detail-chart-pdf"></script>
+    <script src="assets/js/app.js?v=20260623-ai-detail-chart-pdf"></script>
+  </body>
+</html>
+

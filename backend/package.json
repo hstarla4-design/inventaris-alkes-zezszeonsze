@@ -1,0 +1,13 @@
+{
+  "name": "@inventaris-alkes/backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "node src/app.js",
+    "bot:inventory": "node src/integrations/telegram/telegram-inventory-bot.mjs",
+    "bot:ai": "node src/integrations/telegram/telegram-ai-router-bot.mjs",
+    "mail:vendor": "node src/integrations/gmail/gmail-vendor-mailer.mjs"
+  }
+}

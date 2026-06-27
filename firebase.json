@@ -1,0 +1,52 @@
+{
+  "hosting": {
+    "public": "frontend/public",
+    "ignore": [
+      "**/.*",
+      "**/node_modules/**",
+      "**/*.sql",
+      "**/*.exe",
+      "**/*.cmd",
+      "**/*.bat",
+      "**/*.ps1",
+      "**/*.mjs",
+      "package*.json",
+      "README.md"
+    ],
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
+        "source": "index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

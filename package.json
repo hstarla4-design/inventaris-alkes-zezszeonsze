@@ -1,0 +1,35 @@
+{
+  "name": "inventaris-alkes-automation-system",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AI Automation System untuk Inventaris dan Maintenance Alat Kesehatan Rumah Sakit.",
+  "scripts": {
+    "dev:api": "node backend/src/app.js",
+    "serve": "firebase emulators:start --only hosting",
+    "deploy": "firebase deploy --only hosting",
+    "bot:inventory": "node telegram-inventory-bot.mjs",
+    "bot:ai": "node telegram-ai-router-bot.mjs",
+    "mail:vendor": "node gmail-vendor-mailer.mjs",
+    "automation:openclaw": "node openclaw-inventory.mjs",
+    "check": "node --check backend/src/app.js && node --check frontend/public/assets/js/app.js && node --check telegram-inventory-bot.mjs && node --check telegram-ai-router-bot.mjs && node --check gmail-vendor-mailer.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.98.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.1",
+    "firebase-admin": "^13.6.0",
+    "helmet": "^8.1.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
+    "pngjs": "^5.0.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.17.0",
+    "openclaw": "^2026.5.6",
+    "supabase": "^2.98.0"
+  }
+}

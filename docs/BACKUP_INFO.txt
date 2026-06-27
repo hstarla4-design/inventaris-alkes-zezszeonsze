@@ -1,0 +1,18 @@
+BACKUP INVENTARIS ALKES
+
+Isi backup ini dibuat untuk menyimpan project Inventaris Alat Kesehatan secara lengkap.
+
+Bagian utama:
+- Website Firebase Hosting: index.html, app.js, styles.css, firebase.json
+- Bot Telegram operasional: telegram-inventory-bot.mjs
+- Bot Telegram AI/router: telegram-ai-router-bot.mjs
+- OpenClaw inventory script: openclaw-inventory.mjs
+- Gmail vendor mailer: gmail-vendor-mailer.mjs
+- SQL Supabase: *.sql
+- Konfigurasi Node/Firebase: package.json, package-lock.json
+- State/config lokal yang ada di workspace
+
+Catatan keamanan:
+- Full backup dapat berisi token, konfigurasi lokal, log, dan state bot.
+- Jangan upload ZIP ini ke tempat publik.
+- Jika dibagikan ke orang lain, sebaiknya ganti token Telegram, API key, dan password/app password Gmail setelahnya.
