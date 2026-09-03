@@ -1,6 +1,6 @@
 # Inventaris Alkes Automation System
 
-AI Automation System untuk inventaris, maintenance, kalibrasi, approval, notifikasi, Telegram bot, Gmail vendor workflow, dan dashboard monitoring alat kesehatan rumah sakit.
+AI Automation System untuk inventaris, maintenance, kalibrasi, approval, notifikasi, Telegram bot, dan dashboard monitoring alat kesehatan rumah sakit.
 
 ## Struktur Utama
 
